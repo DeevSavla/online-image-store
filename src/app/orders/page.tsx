@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { IOrder } from "../../../models/order.model";
 import { Loader2, Download } from "lucide-react";
-import { IKImage } from "imagekitio-next";
+import { Image } from "@imagekit/next";
 import { IMAGE_VARIANTS } from "../../../models/product.model";
 import { apiClient } from "../../../lib/api-client";
 
@@ -63,19 +63,12 @@ export default function OrdersPage() {
                       aspectRatio: `${variantDimensions.width} / ${variantDimensions.height}`,
                     }}
                   >
-                    <IKImage
-                      urlEndpoint={process.env.NEXT_PUBLIC_URL_ENDPOINT}
-                      path={product.imageUrl}
+                    import Image from "next/image";
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_IMAGEKIT_BASE_URL}${product.imageUrl}?tr=q-60,w-${variantDimensions.width},h-${variantDimensions.height},cm-extract,fo-center`}
                       alt={`Order ${order._id?.toString().slice(-6)}`}
-                      transformation={[
-                        {
-                          quality: "60",
-                          width: variantDimensions.width.toString(),
-                          height: variantDimensions.height.toString(),
-                          cropMode: "extract",
-                          focus: "center",
-                        },
-                      ]}
+                      width={variantDimensions.width}
+                      height={variantDimensions.height}
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />

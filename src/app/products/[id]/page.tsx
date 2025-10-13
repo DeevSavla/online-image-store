@@ -1,6 +1,6 @@
 "use client";
 
-import { IKImage } from "imagekitio-next";
+import { Image } from "@imagekit/next";
 import {
   IProduct,
   ImageVariant,
@@ -143,15 +143,21 @@ export default function ProductPage() {
                 : "1 / 1",
             }}
           >
-            <IKImage
-              urlEndpoint={process.env.NEXT_PUBLIC_URL_ENDPOINT}
-              path={product.imageUrl}
+            <Image
+              src={`${process.env.NEXT_PUBLIC_IMAGEKIT_BASE_URL}${
+                product.imageUrl
+              }?tr=${(selectedVariant
+                ? getTransformation(selectedVariant.type)
+                : getTransformation("SQUARE")
+              )
+                .map(
+                  (t) =>
+                    `q-${t.quality || 80},w-${t.width},h-${t.height},cm-${
+                      t.cropMode
+                    },fo-${t.focus}`
+                )
+                .join(",")}`}
               alt={product.name}
-              transformation={
-                selectedVariant
-                  ? getTransformation(selectedVariant.type)
-                  : getTransformation("SQUARE")
-              }
               className="w-full h-full object-cover"
               loading="eager"
             />

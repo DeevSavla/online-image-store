@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import FileUpload from "./FileUpload";
-import { IKUploadResponse } from "imagekitio-next/dist/types/components/IKUpload/props";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import { useNotification } from "./Notification";
 import { IMAGE_VARIANTS, ImageVariantType } from "../../../models/product.model";
@@ -39,8 +38,9 @@ export default function AdminProductForm() {
     name: "variants",
   });
 
-  const handleUploadSuccess = (response: IKUploadResponse) => {
-    setValue("imageUrl", response.filePath);
+  // ✅ Handle upload success using your FileUpload component
+  const handleUploadSuccess = (fileUrl: string) => {
+    setValue("imageUrl", fileUrl);
     showNotification("Image uploaded successfully!", "success");
   };
 
@@ -50,7 +50,7 @@ export default function AdminProductForm() {
       await apiClient.createProduct(data);
       showNotification("Product created successfully!", "success");
 
-      // Reset form after successful submission
+      // Reset form
       setValue("name", "");
       setValue("description", "");
       setValue("imageUrl", "");
@@ -73,6 +73,7 @@ export default function AdminProductForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {/* Product Name */}
       <div className="form-control">
         <label className="label">Product Name</label>
         <input
@@ -85,6 +86,7 @@ export default function AdminProductForm() {
         )}
       </div>
 
+      {/* Description */}
       <div className="form-control">
         <label className="label">Description</label>
         <textarea
@@ -100,6 +102,7 @@ export default function AdminProductForm() {
         )}
       </div>
 
+      {/* Image Upload */}
       <div className="form-control">
         <label className="label">Product Image</label>
         <FileUpload onSuccess={handleUploadSuccess} />
@@ -107,6 +110,7 @@ export default function AdminProductForm() {
 
       <div className="divider">Image Variants</div>
 
+      {/* Variants Section */}
       {fields.map((field, index) => (
         <div key={field.id} className="card bg-base-200 p-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -170,6 +174,7 @@ export default function AdminProductForm() {
         </div>
       ))}
 
+      {/* Add Variant Button */}
       <button
         type="button"
         className="btn btn-outline btn-block"
@@ -185,6 +190,7 @@ export default function AdminProductForm() {
         Add Variant
       </button>
 
+      {/* Submit Button */}
       <button
         type="submit"
         className="btn btn-primary btn-block"

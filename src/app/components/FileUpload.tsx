@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import { upload } from "@imagekit/next";
 import { authenticator } from "../../../lib/authenticator";
 
-export default function FileUpload() {
+interface FileUploadProps {
+  onSuccess?: (fileUrl: string) => void;
+}
+
+export default function FileUpload({ onSuccess }: FileUploadProps) {
   const [progress, setProgress] = useState(0);
   const [fileUrl, setFileUrl] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
@@ -33,6 +37,7 @@ export default function FileUpload() {
 
       if (response.url) {
         setFileUrl(response.url);
+        onSuccess?.(response.url);
       } else {
         console.error("No URL returned from ImageKit response:", response);
       }
@@ -45,7 +50,7 @@ export default function FileUpload() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+    <div className="flex flex-col items-center gap-4">
       <input
         type="file"
         onChange={handleUpload}

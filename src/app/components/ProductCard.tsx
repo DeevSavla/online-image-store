@@ -1,4 +1,4 @@
-import { IKImage } from "imagekitio-next";
+import { Image } from "@imagekit/next";
 import Link from "next/link";
 import { IProduct, IMAGE_VARIANTS } from "../../../models/product.model";
 import { Eye } from "lucide-react";
@@ -24,20 +24,14 @@ export default function ProductCard({ product }: { product: IProduct }) {
                 IMAGE_VARIANTS.SQUARE.dimensions.height,
             }}
           >
-            <IKImage
-              path={product.imageUrl}
+            import Image from "next/image";
+            <Image
+              src={`${process.env.NEXT_PUBLIC_IMAGEKIT_BASE_URL}${product.imageUrl}?tr=q-80,w-${IMAGE_VARIANTS.SQUARE.dimensions.width},h-${IMAGE_VARIANTS.SQUARE.dimensions.height},cm-extract,fo-center`}
               alt={product.name}
-              loading="eager"
-              transformation={[
-                {
-                  height: IMAGE_VARIANTS.SQUARE.dimensions.height.toString(),
-                  width: IMAGE_VARIANTS.SQUARE.dimensions.width.toString(),
-                  cropMode: "extract",
-                  focus: "center",
-                  quality: "80",
-                },
-              ]}
+              width={IMAGE_VARIANTS.SQUARE.dimensions.width}
+              height={IMAGE_VARIANTS.SQUARE.dimensions.height}
               className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="eager"
             />
           </div>
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-xl" />
