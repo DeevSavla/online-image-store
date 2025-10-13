@@ -25,8 +25,9 @@ export default function Home() {
 
   return (
     <>
-      <h1 className="mb-6">ImageKit Shop</h1>
-      <ImageGallery products={products} />
+      <div className="p-6">
+        <ImageGallery products={products} />
+      </div>
     </>
   );
 }

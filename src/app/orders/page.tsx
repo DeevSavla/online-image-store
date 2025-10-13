@@ -6,7 +6,6 @@ import { IOrder } from "../../../models/order.model";
 import { Loader2, Download } from "lucide-react";
 import { Image } from "@imagekit/next";
 import { IMAGE_VARIANTS } from "../../../models/product.model";
- 
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<IOrder[]>([]);
@@ -19,6 +18,7 @@ export default function OrdersPage() {
         const res = await fetch("/api/orders/user", { cache: "no-store" });
         if (!res.ok) throw new Error(await res.text());
         const data = await res.json();
+        console.log(data);
         setOrders(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -48,7 +48,10 @@ export default function OrdersPage() {
               order.variant.type.toUpperCase() as keyof typeof IMAGE_VARIANTS
             ].dimensions;
 
-          const product = order.productId as any;
+          const product =
+            typeof order.productId === "object" && "imageUrl" in order.productId
+              ? order.productId
+              : null;
 
           return (
             <div
@@ -65,21 +68,26 @@ export default function OrdersPage() {
                       aspectRatio: `${variantDimensions.width} / ${variantDimensions.height}`,
                     }}
                   >
-                    <Image
-                      src={product.imageUrl}
-                      alt={`Order ${order._id?.toString().slice(-6)}`}
-                      width={variantDimensions.width}
-                      height={variantDimensions.height}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      transformation={[{
-                        width: variantDimensions.width.toString(),
-                        height: variantDimensions.height.toString(),
-                        cropMode: "extract",
-                        focus: "center",
-                        quality: "60",
-                      }]}
-                    />
+                    {typeof order.productId === "object" &&
+                      "imageUrl" in order.productId && (
+                        <Image
+                          src={order.productId.imageUrl}
+                          alt={`Order ${order._id?.toString().slice(-6)}`}
+                          width={variantDimensions.width}
+                          height={variantDimensions.height}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                          transformation={[
+                            {
+                              width: variantDimensions.width.toString(),
+                              height: variantDimensions.height.toString(),
+                              cropMode: "extract",
+                              focus: "center",
+                              quality: 60,
+                            },
+                          ]}
+                        />
+                      )}
                   </div>
 
                   {/* Order Details */}
@@ -123,7 +131,7 @@ export default function OrdersPage() {
                         </p>
                         {order.status === "completed" && (
                           <a
-                            href={`${process.env.NEXT_PUBLIC_IMAGEKIT_BASE_URL}tr:q-100,w-${variantDimensions.width},h-${variantDimensions.height},cm-extract,fo-center/${product.imageUrl}`}
+                            href={`${product?.imageUrl}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn btn-primary gap-2"
