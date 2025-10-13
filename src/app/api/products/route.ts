@@ -8,13 +8,7 @@ export async function GET() {
   try {
     await connectToDB();
     const products = await Product.find({}).lean();
-    //lean() function - Don’t wrap results in Mongoose Document objects — just give me plain JavaScript objects
-
-    if (!products || products.length === 0) {
-      return NextResponse.json({ error: "No products found" }, { status: 404 });
-    }
-
-    return NextResponse.json({ products }, { status: 200 });
+    return NextResponse.json({ products: products ?? [] }, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json(

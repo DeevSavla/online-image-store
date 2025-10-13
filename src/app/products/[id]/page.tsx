@@ -1,6 +1,6 @@
 "use client";
 
-import { Image } from "@imagekit/next";
+import { Image, type Transformation } from "@imagekit/next";
 import {
   IProduct,
   ImageVariant,
@@ -12,7 +12,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Loader2, AlertCircle, Check, Image as ImageIcon } from "lucide-react";
 import { useNotification } from "@/app/components/Notification";
 import { useSession } from "next-auth/react";
-import { apiClient } from "../../../../lib/api-client";
+ 
 
 export default function ProductPage() {
   const params = useParams();
@@ -37,7 +37,9 @@ export default function ProductPage() {
       }
 
       try {
-        const data = await apiClient.getProduct(id.toString());
+        const res = await fetch(`/api/products/${id.toString()}`, { cache: "no-store" });
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json();
         setProduct(data);
       } catch (err) {
         console.error("Error fetching product:", err);
@@ -63,10 +65,13 @@ export default function ProductPage() {
     }
 
     try {
-      const { orderId, amount } = await apiClient.createOrder({
-        productId: product._id,
-        variant,
+      const orderRes = await fetch(`/api/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: product._id, variant }),
       });
+      if (!orderRes.ok) throw new Error(await orderRes.text());
+      const { orderId, amount } = await orderRes.json();
 
       // if (!process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID) {
       //   showNotification("Razorpay key is missing", "error");
@@ -100,7 +105,7 @@ export default function ProductPage() {
     }
   };
 
-  const getTransformation = (variantType: ImageVariantType) => {
+  const getTransformation = (variantType: ImageVariantType): Transformation[] => {
     const variant = IMAGE_VARIANTS[variantType];
     return [
       {
@@ -108,28 +113,28 @@ export default function ProductPage() {
         height: variant.dimensions.height.toString(),
         cropMode: "extract",
         focus: "center",
-        quality: "60",
-      },
+        quality: 60,
+      } satisfies Transformation,
     ];
   };
 
   if (loading)
     return (
       <div className="min-h-[70vh] flex justify-center items-center">
-        <Loader2 className="w-12 h-12 animate-spin text-primary" />
+        <Loader2 className="w-12 h-12 animate-spin text-white" />
       </div>
     );
 
   if (error || !product)
     return (
-      <div className="alert alert-error max-w-md mx-auto my-8">
+      <div className="max-w-md mx-auto my-8 rounded-md border border-red-500/40 bg-red-500/10 px-4 py-3 text-red-300 flex items-center gap-3">
         <AlertCircle className="w-6 h-6" />
         <span>{error || "Product not found"}</span>
       </div>
     );
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="px-1 sm:px-2 md:px-4">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Image Section */}
         <div className="space-y-4">
@@ -144,28 +149,26 @@ export default function ProductPage() {
             }}
           >
             <Image
-              src={`${process.env.NEXT_PUBLIC_IMAGEKIT_BASE_URL}${
-                product.imageUrl
-              }?tr=${(selectedVariant
-                ? getTransformation(selectedVariant.type)
-                : getTransformation("SQUARE")
-              )
-                .map(
-                  (t) =>
-                    `q-${t.quality || 80},w-${t.width},h-${t.height},cm-${
-                      t.cropMode
-                    },fo-${t.focus}`
-                )
-                .join(",")}`}
+              src={product.imageUrl}
               alt={product.name}
               className="w-full h-full object-cover"
               loading="eager"
+              priority
+              width={(selectedVariant
+                ? IMAGE_VARIANTS[selectedVariant.type].dimensions.width
+                : IMAGE_VARIANTS.SQUARE.dimensions.width).valueOf()}
+              height={(selectedVariant
+                ? IMAGE_VARIANTS[selectedVariant.type].dimensions.height
+                : IMAGE_VARIANTS.SQUARE.dimensions.height).valueOf()}
+              transformation={selectedVariant
+                ? getTransformation(selectedVariant.type)
+                : getTransformation("SQUARE")}
             />
           </div>
 
           {/* Image Dimensions Info */}
           {selectedVariant && (
-            <div className="text-sm text-center text-base-content/70">
+            <div className="text-sm text-center text-neutral-400">
               Preview: {IMAGE_VARIANTS[selectedVariant.type].dimensions.width} x{" "}
               {IMAGE_VARIANTS[selectedVariant.type].dimensions.height}px
             </div>
@@ -184,17 +187,17 @@ export default function ProductPage() {
           {/* Variants Selection */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Available Versions</h2>
-            {product.variants.map((variant) => (
+            {product.variants.map((variant, index) => (
               <div
-                key={variant.type}
-                className={`card bg-base-200 cursor-pointer hover:bg-base-300 transition-colors ${
+                key={`${variant.type}-${index}`}
+                className={`rounded-lg border cursor-pointer transition-colors bg-neutral-900 border-white/10 hover:bg-neutral-800 ${
                   selectedVariant?.type === variant.type
-                    ? "ring-2 ring-primary"
+                    ? "ring-2 ring-white/30"
                     : ""
                 }`}
                 onClick={() => setSelectedVariant(variant)}
               >
-                <div className="card-body p-4">
+                <div className="p-4">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
                       <ImageIcon className="w-5 h-5" />
@@ -227,7 +230,7 @@ export default function ProductPage() {
                         ${variant.price.toFixed(2)}
                       </span>
                       <button
-                        className="btn btn-primary btn-sm"
+                        className="inline-flex items-center rounded-md bg-white text-black px-3 py-1.5 text-sm font-medium hover:bg-neutral-200 transition"
                         onClick={(e) => {
                           e.stopPropagation();
                           handlePurchase(variant);
@@ -243,16 +246,16 @@ export default function ProductPage() {
           </div>
 
           {/* License Information */}
-          <div className="card bg-base-200">
-            <div className="card-body p-4">
+          <div className="rounded-lg border border-white/10 bg-neutral-900">
+            <div className="p-4">
               <h3 className="font-semibold mb-2">License Information</h3>
               <ul className="space-y-2">
                 <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-success" />
+                  <Check className="w-4 h-4 text-green-400" />
                   <span>Personal: Use in personal projects</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-success" />
+                  <Check className="w-4 h-4 text-green-400" />
                   <span>Commercial: Use in commercial projects</span>
                 </li>
               </ul>

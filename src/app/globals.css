@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
+  --background: #0a0a0a;
+  --foreground: #fafafa;
 }
 
 body {
@@ -10,6 +10,13 @@ body {
   background: var(--background);
   min-height: 100vh;
 }
+
+/* Base typography scale */
+h1 { @apply text-3xl md:text-4xl font-bold; }
+h2 { @apply text-2xl md:text-3xl font-semibold; }
+h3 { @apply text-xl md:text-2xl font-semibold; }
+p  { @apply leading-7 text-neutral-200; }
+small { @apply text-sm text-neutral-400; }
 
 /* Force dark mode for inputs and other elements */
 input,

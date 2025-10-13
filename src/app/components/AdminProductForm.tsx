@@ -5,8 +5,9 @@ import { useForm, useFieldArray } from "react-hook-form";
 import FileUpload from "./FileUpload";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import { useNotification } from "./Notification";
-import { IMAGE_VARIANTS, ImageVariantType } from "../../../models/product.model";
-import { apiClient, ProductFormData } from "../../../lib/api-client";
+import { IMAGE_VARIANTS, ImageVariantType, IProduct } from "../../../models/product.model";
+
+type ProductFormData = Omit<IProduct, "_id">;
 
 export default function AdminProductForm() {
   const [loading, setLoading] = useState(false);
@@ -47,7 +48,12 @@ export default function AdminProductForm() {
   const onSubmit = async (data: ProductFormData) => {
     setLoading(true);
     try {
-      await apiClient.createProduct(data);
+      const res = await fetch("/api/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(await res.text());
       showNotification("Product created successfully!", "success");
 
       // Reset form

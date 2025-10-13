@@ -32,13 +32,18 @@ export async function POST(req: Request) {
       },
     });
 
+    console.log('order:',order)
+
     const newOrder = await Order.create({
       userId: session.user.id,
       productId,
+      variant,
       razorpayOrderId: order.id,
       amount: variant.price,
       status: "pending",
     });
+
+    console.log('newOrder:',newOrder)
 
     return NextResponse.json({
       orderId: order.id,

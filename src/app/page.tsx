@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import ImageGallery from "./components/ImageGallery";
 import { IProduct } from "../../models/product.model";
-import { apiClient } from "../../lib/api-client";
+ 
 
 export default function Home() {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -11,8 +11,10 @@ export default function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await apiClient.getProducts();
-        setProducts(data);
+        const res = await fetch("/api/products", { cache: "no-store" });
+        if (!res.ok) throw new Error(await res.text());
+        const json = await res.json();
+        setProducts(Array.isArray(json?.products) ? json.products : []);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -22,9 +24,9 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">ImageKit Shop</h1>
+    <>
+      <h1 className="mb-6">ImageKit Shop</h1>
       <ImageGallery products={products} />
-    </main>
+    </>
   );
 }
