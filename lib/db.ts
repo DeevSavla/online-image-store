@@ -31,11 +31,15 @@ export async function connectToDB() {
   }
   //resolve the promise, get the connection to cached 
   try {
-    cached.conn = await cached.promise;
-  } catch (error:any) {
-    console.log(error)
-    cached.promise = null;
+  cached.conn = await cached.promise;
+} catch (error: unknown) {
+  if (error instanceof Error) {
+    console.log("DB connection error:", error.message);
+  } else {
+    console.log("Unknown error:", error);
   }
+  cached.promise = null;
+}
   //lastly return it.
   return cached.conn;
 }
