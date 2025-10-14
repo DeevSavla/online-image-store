@@ -3,18 +3,17 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { Home, User } from "lucide-react";
-import { useNotification } from "./Notification";
+import toast from "react-hot-toast";
 
 export default function Header() {
   const { data: session } = useSession();
-  const { showNotification } = useNotification();
 
   const handleSignOut = async () => {
     try {
       await signOut();
-      showNotification("Signed out successfully", "success");
+      toast.success("Signed out successfully");
     } catch {
-      showNotification("Failed to sign out", "error");
+      toast.error("Failed to sign out");
     }
   };
 
@@ -26,7 +25,7 @@ export default function Header() {
             href="/"
             className="inline-flex items-center gap-2 text-lg font-semibold"
             prefetch={true}
-            onClick={() => showNotification("Welcome to ImageKit Shop", "info")}
+            onClick={() => toast("Welcome to ImageKit Shop", { icon: "ℹ️" })}
           >
             <Home className="w-5 h-5" />
             <span>ImageKit Shop</span>
@@ -49,7 +48,7 @@ export default function Header() {
                         href="/admin"
                         className="block w-full px-3 py-2 rounded hover:bg-white/10"
                         onClick={() =>
-                          showNotification("Welcome to Admin Dashboard", "info")
+                          toast("Welcome to Admin Dashboard", { icon: "ℹ️" })
                         }
                       >
                         Admin Dashboard
@@ -69,7 +68,7 @@ export default function Header() {
                   <Link
                     href="/login"
                     className="block w-full px-3 py-2 rounded hover:bg-white/10"
-                    onClick={() => showNotification("Please sign in to continue", "info")}
+                    onClick={() => toast("Please sign in to continue", { icon: "ℹ️" })}
                   >
                     Login
                   </Link>

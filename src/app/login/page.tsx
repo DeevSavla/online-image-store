@@ -3,14 +3,13 @@
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useNotification } from "../components/Notification";
+import toast from "react-hot-toast";
 import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const { showNotification } = useNotification();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,9 +20,9 @@ export default function Login() {
     });
 
     if (result?.error) {
-      showNotification(result.error, "error");
+      toast.error(result.error);
     } else {
-      showNotification("Login successful!", "success");
+      toast.success("Login successful!");
       router.push("/");
     }
   };

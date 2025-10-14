@@ -4,14 +4,13 @@ import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import FileUpload from "./FileUpload";
 import { Loader2, Plus, Trash2 } from "lucide-react";
-import { useNotification } from "./Notification";
+import toast from "react-hot-toast";
 import { IMAGE_VARIANTS, ImageVariantType, IProduct } from "../../../models/product.model";
 
 type ProductFormData = Omit<IProduct, "_id">;
 
 export default function AdminProductForm() {
   const [loading, setLoading] = useState(false);
-  const { showNotification } = useNotification();
 
   const {
     register,
@@ -42,7 +41,7 @@ export default function AdminProductForm() {
   // ✅ Handle upload success using your FileUpload component
   const handleUploadSuccess = (fileUrl: string) => {
     setValue("imageUrl", fileUrl);
-    showNotification("Image uploaded successfully!", "success");
+    toast.success("Image uploaded successfully!");
   };
 
   const onSubmit = async (data: ProductFormData) => {
@@ -54,7 +53,7 @@ export default function AdminProductForm() {
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error(await res.text());
-      showNotification("Product created successfully!", "success");
+      toast.success("Product created successfully!");
 
       // Reset form
       setValue("name", "");
@@ -68,9 +67,8 @@ export default function AdminProductForm() {
         },
       ]);
     } catch (error) {
-      showNotification(
-        error instanceof Error ? error.message : "Failed to create product",
-        "error"
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create product"
       );
     } finally {
       setLoading(false);

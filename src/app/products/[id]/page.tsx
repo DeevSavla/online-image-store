@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Loader2, AlertCircle, Check, Image as ImageIcon } from "lucide-react";
-import { useNotification } from "@/app/components/Notification";
+import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
  
 
@@ -22,7 +22,6 @@ export default function ProductPage() {
   const [selectedVariant, setSelectedVariant] = useState<ImageVariant | null>(
     null
   );
-  const { showNotification } = useNotification();
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -54,13 +53,13 @@ export default function ProductPage() {
 
   const handlePurchase = async (variant: ImageVariant) => {
     if (!session) {
-      showNotification("Please login to make a purchase", "error");
+      toast.error("Please login to make a purchase");
       router.push("/login");
       return;
     }
 
     if (!product?._id) {
-      showNotification("Invalid product", "error");
+      toast.error("Invalid product");
       return;
     }
 
@@ -86,7 +85,7 @@ export default function ProductPage() {
         description: `${product.name} - ${variant.type} Version`,
         order_id: orderId,
         handler: function () {
-          showNotification("Payment successful!", "success");
+          toast.success("Payment successful!");
           router.push("/orders");
         },
         prefill: {
@@ -98,9 +97,8 @@ export default function ProductPage() {
       rzp.open();
     } catch (error) {
       console.error(error);
-      showNotification(
-        error instanceof Error ? error.message : "Payment failed",
-        "error"
+      toast.error(
+        error instanceof Error ? error.message : "Payment failed"
       );
     }
   };

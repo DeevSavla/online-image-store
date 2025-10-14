@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useNotification } from "../components/Notification";
+import toast from "react-hot-toast";
 import Link from "next/link";
 
 export default function Register() {
@@ -10,13 +10,12 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const router = useRouter();
-  const { showNotification } = useNotification();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      showNotification("Passwords do not match", "error");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -33,12 +32,11 @@ export default function Register() {
         throw new Error(data.error || "Registration failed");
       }
 
-      showNotification("Registration successful! Please log in.", "success");
+      toast.success("Registration successful! Please log in.");
       router.push("/login");
     } catch (error) {
-      showNotification(
-        error instanceof Error ? error.message : "Registration failed",
-        "error"
+      toast.error(
+        error instanceof Error ? error.message : "Registration failed"
       );
     }
   };

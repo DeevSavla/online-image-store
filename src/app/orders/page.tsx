@@ -39,9 +39,9 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-4">
       <h1 className="text-3xl font-bold mb-8">My Orders</h1>
-      <div className="space-y-6">
+      <div className="space-y-2">
         {orders.map((order) => {
           const variantDimensions =
             IMAGE_VARIANTS[
@@ -122,14 +122,21 @@ export default function OrdersPage() {
                               {order.status}
                             </span>
                           </p>
-                        </div>
-                      </div>
-
-                      <div className="text-right">
-                        <p className="text-2xl font-bold mb-4">
-                          ${order.amount.toFixed(2)}
-                        </p>
-                        {order.status === "completed" && (
+                          <p>
+                            Price:{" "}
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                order.status === "completed"
+                                  ? "bg-success/20 text-success"
+                                  : order.status === "failed"
+                                  ? "bg-error/20 text-error"
+                                  : "bg-warning/20 text-warning"
+                              }`}
+                            >
+                              ${order.amount}
+                            </span>
+                          </p>
+                          {order.status === "completed" && (
                           <a
                             href={`${product?.imageUrl}`}
                             target="_blank"
@@ -143,6 +150,7 @@ export default function OrdersPage() {
                             Download High Quality
                           </a>
                         )}
+                        </div>
                       </div>
                     </div>
                   </div>
