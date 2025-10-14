@@ -32,7 +32,8 @@ export async function connectToDB() {
   //resolve the promise, get the connection to cached 
   try {
     cached.conn = await cached.promise;
-  } catch (error) {
+  } catch (error:any) {
+    console.log(error)
     cached.promise = null;
   }
   //lastly return it.
