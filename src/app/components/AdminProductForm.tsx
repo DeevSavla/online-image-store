@@ -76,52 +76,56 @@ export default function AdminProductForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-4xl mx-auto">
       {/* Product Name */}
-      <div className="form-control">
-        <label className="label">Product Name</label>
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-300">Product Name</label>
         <input
           type="text"
-          className={`input input-bordered ${errors.name ? "input-error" : ""}`}
+          className={`w-full px-3 py-2 bg-gray-800 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            errors.name ? "border-red-500" : "border-gray-600"
+          }`}
           {...register("name", { required: "Name is required" })}
         />
         {errors.name && (
-          <span className="text-error text-sm mt-1">{errors.name.message}</span>
+          <span className="text-red-400 text-sm">{errors.name.message}</span>
         )}
       </div>
 
       {/* Description */}
-      <div className="form-control">
-        <label className="label">Description</label>
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-300">Description</label>
         <textarea
-          className={`textarea textarea-bordered h-24 ${
-            errors.description ? "textarea-error" : ""
+          className={`w-full px-3 py-2 bg-gray-800 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24 resize-none ${
+            errors.description ? "border-red-500" : "border-gray-600"
           }`}
           {...register("description", { required: "Description is required" })}
         />
         {errors.description && (
-          <span className="text-error text-sm mt-1">
+          <span className="text-red-400 text-sm">
             {errors.description.message}
           </span>
         )}
       </div>
 
       {/* Image Upload */}
-      <div className="form-control">
-        <label className="label">Product Image</label>
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-300">Product Image</label>
         <FileUpload onSuccess={handleUploadSuccess} />
       </div>
 
-      <div className="divider">Image Variants</div>
+      <div className="border-t border-gray-700 pt-6">
+        <h3 className="text-lg font-semibold text-gray-200 mb-4">Image Variants</h3>
+      </div>
 
       {/* Variants Section */}
       {fields.map((field, index) => (
-        <div key={field.id} className="card bg-base-200 p-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="form-control">
-              <label className="label">Size & Aspect Ratio</label>
+        <div key={field.id} className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-300">Size & Aspect Ratio</label>
               <select
-                className="select select-bordered"
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 {...register(`variants.${index}.type`)}
               >
                 {Object.entries(IMAGE_VARIANTS).map(([key, value]) => (
@@ -133,10 +137,10 @@ export default function AdminProductForm() {
               </select>
             </div>
 
-            <div className="form-control">
-              <label className="label">License</label>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-300">License</label>
               <select
-                className="select select-bordered"
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 {...register(`variants.${index}.license`)}
               >
                 <option value="personal">Personal Use</option>
@@ -144,13 +148,13 @@ export default function AdminProductForm() {
               </select>
             </div>
 
-            <div className="form-control">
-              <label className="label">Price ($)</label>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-300">Price ($)</label>
               <input
                 type="number"
                 step="0.01"
                 min="0.01"
-                className="input input-bordered"
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 {...register(`variants.${index}.price`, {
                   valueAsNumber: true,
                   required: "Price is required",
@@ -158,7 +162,7 @@ export default function AdminProductForm() {
                 })}
               />
               {errors.variants?.[index]?.price && (
-                <span className="text-error text-sm mt-1">
+                <span className="text-red-400 text-sm">
                   {errors.variants[index]?.price?.message}
                 </span>
               )}
@@ -167,7 +171,7 @@ export default function AdminProductForm() {
             <div className="flex items-end">
               <button
                 type="button"
-                className="btn btn-error btn-sm"
+                className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={() => remove(index)}
                 disabled={fields.length === 1}
               >
@@ -181,7 +185,7 @@ export default function AdminProductForm() {
       {/* Add Variant Button */}
       <button
         type="button"
-        className="btn btn-outline btn-block"
+        className="w-full px-4 py-2 border border-gray-600 text-gray-300 rounded-md hover:bg-gray-700 hover:border-gray-500 transition-colors flex items-center justify-center"
         onClick={() =>
           append({
             type: "SQUARE" as ImageVariantType,
@@ -197,7 +201,7 @@ export default function AdminProductForm() {
       {/* Submit Button */}
       <button
         type="submit"
-        className="btn btn-primary btn-block"
+        className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
         disabled={loading}
       >
         {loading ? (

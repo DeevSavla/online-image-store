@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Home, User } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function Header() {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const handleSignOut = async () => {
     try {
-      await signOut();
+      await signOut({ redirect: false });
       toast.success("Signed out successfully");
+      router.push("/");
     } catch {
       toast.error("Failed to sign out");
     }

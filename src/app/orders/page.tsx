@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { IOrder } from "../../../models/order.model";
 import { Loader2, Download } from "lucide-react";
 import { Image } from "@imagekit/next";
@@ -10,9 +11,20 @@ import { IMAGE_VARIANTS } from "../../../models/product.model";
 export default function OrdersPage() {
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState(true);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
+    // Check authentication first
+    if (status === "loading") return; // Still loading
+
+    if (!session) {
+      // Not authenticated, redirect to login
+      router.push("/login");
+      return;
+    }
+
+    // If authenticated, fetch orders
     const fetchOrders = async () => {
       try {
         const res = await fetch("/api/orders/user", { cache: "no-store" });
@@ -27,15 +39,21 @@ export default function OrdersPage() {
       }
     };
 
-    if (session) fetchOrders();
-  }, [session]);
+    fetchOrders();
+  }, [session, status, router]);
 
-  if (loading) {
+  // Show loading while checking authentication or fetching data
+  if (status === "loading" || loading) {
     return (
       <div className="min-h-[70vh] flex justify-center items-center">
-        <Loader2 className="w-12 h-12 animate-spin text-primary" />
+        <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
       </div>
     );
+  }
+
+  // Don't render anything if not authenticated (will redirect)
+  if (!session) {
+    return null;
   }
 
   return (

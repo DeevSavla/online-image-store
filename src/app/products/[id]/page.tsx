@@ -72,11 +72,6 @@ export default function ProductPage() {
       if (!orderRes.ok) throw new Error(await orderRes.text());
       const { orderId, amount } = await orderRes.json();
 
-      // if (!process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID) {
-      //   showNotification("Razorpay key is missing", "error");
-      //   return;
-      // }
-
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount,
@@ -132,19 +127,12 @@ export default function ProductPage() {
     );
 
   return (
-    <div className="px-1 sm:px-2 md:px-4">
+    <div className="px-10 sm:px-2 md:px-4">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Image Section */}
         <div className="space-y-4">
           <div
             className="relative rounded-lg overflow-hidden"
-            style={{
-              aspectRatio: selectedVariant
-                ? `${IMAGE_VARIANTS[selectedVariant.type].dimensions.width} / ${
-                    IMAGE_VARIANTS[selectedVariant.type].dimensions.height
-                  }`
-                : "1 / 1",
-            }}
           >
             <Image
               src={product.imageUrl}
