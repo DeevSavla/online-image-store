@@ -11,22 +11,19 @@ export default function AdminPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "loading") return; // Still loading
+    if (status === "loading") return; 
 
     if (!session) {
-      // Not authenticated, redirect to login
       router.push("/login");
       return;
     }
 
     if (session.user?.role !== "admin") {
-      // Not admin, redirect to home
       router.push("/");
       return;
     }
   }, [session, status, router]);
 
-  // Show loading while checking authentication
   if (status === "loading") {
     return (
       <div className="min-h-[70vh] flex justify-center items-center">
@@ -35,7 +32,6 @@ export default function AdminPage() {
     );
   }
 
-  // Don't render anything if not admin (will redirect)
   if (!session || session.user?.role !== "admin") {
     return null;
   }

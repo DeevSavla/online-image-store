@@ -38,7 +38,6 @@ export default function AdminProductForm() {
     name: "variants",
   });
 
-  // ✅ Handle upload success using your FileUpload component
   const handleUploadSuccess = (fileUrl: string) => {
     setValue("imageUrl", fileUrl);
     toast.success("Image uploaded successfully!");
@@ -55,7 +54,6 @@ export default function AdminProductForm() {
       if (!res.ok) throw new Error(await res.text());
       toast.success("Product created successfully!");
 
-      // Reset form
       setValue("name", "");
       setValue("description", "");
       setValue("imageUrl", "");
@@ -77,7 +75,7 @@ export default function AdminProductForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-4xl mx-auto">
-      {/* Product Name */}
+
       <div className="space-y-2">
         <label className="block text-sm font-medium text-gray-300">Product Name</label>
         <input
@@ -92,7 +90,6 @@ export default function AdminProductForm() {
         )}
       </div>
 
-      {/* Description */}
       <div className="space-y-2">
         <label className="block text-sm font-medium text-gray-300">Description</label>
         <textarea
@@ -108,7 +105,6 @@ export default function AdminProductForm() {
         )}
       </div>
 
-      {/* Image Upload */}
       <div className="space-y-2">
         <label className="block text-sm font-medium text-gray-300">Product Image</label>
         <FileUpload onSuccess={handleUploadSuccess} />
@@ -118,7 +114,6 @@ export default function AdminProductForm() {
         <h3 className="text-lg font-semibold text-gray-200 mb-4">Image Variants</h3>
       </div>
 
-      {/* Variants Section */}
       {fields.map((field, index) => (
         <div key={field.id} className="bg-gray-800 border border-gray-700 rounded-lg p-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -182,7 +177,6 @@ export default function AdminProductForm() {
         </div>
       ))}
 
-      {/* Add Variant Button */}
       <button
         type="button"
         className="w-full px-4 py-2 border border-gray-600 text-gray-300 rounded-md hover:bg-gray-700 hover:border-gray-500 transition-colors flex items-center justify-center"
@@ -198,7 +192,6 @@ export default function AdminProductForm() {
         Add Variant
       </button>
 
-      {/* Submit Button */}
       <button
         type="submit"
         className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"

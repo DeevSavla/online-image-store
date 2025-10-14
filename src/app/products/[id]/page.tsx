@@ -34,7 +34,6 @@ export default function ProductPage() {
         setLoading(false);
         return;
       }
-
       try {
         const res = await fetch(`/api/products/${id.toString()}`, { cache: "no-store" });
         if (!res.ok) throw new Error(await res.text());
@@ -129,7 +128,6 @@ export default function ProductPage() {
   return (
     <div className="px-10 sm:px-2 md:px-4">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Image Section */}
         <div className="space-y-4">
           <div
             className="relative rounded-lg overflow-hidden"
@@ -152,7 +150,6 @@ export default function ProductPage() {
             />
           </div>
 
-          {/* Image Dimensions Info */}
           {selectedVariant && (
             <div className="text-sm text-center text-neutral-400">
               Preview: {IMAGE_VARIANTS[selectedVariant.type].dimensions.width} x{" "}
@@ -161,7 +158,6 @@ export default function ProductPage() {
           )}
         </div>
 
-        {/* Product Details Section */}
         <div className="space-y-6">
           <div>
             <h1 className="text-4xl font-bold mb-2">{product.name}</h1>
@@ -170,7 +166,6 @@ export default function ProductPage() {
             </p>
           </div>
 
-          {/* Variants Selection */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Available Versions</h2>
             {product.variants.map((variant, index) => (
@@ -231,7 +226,6 @@ export default function ProductPage() {
             ))}
           </div>
 
-          {/* License Information */}
           <div className="rounded-lg border border-white/10 bg-neutral-900">
             <div className="p-4">
               <h3 className="font-semibold mb-2">License Information</h3>

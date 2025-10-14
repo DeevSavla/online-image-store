@@ -15,16 +15,13 @@ export default function OrdersPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Check authentication first
-    if (status === "loading") return; // Still loading
+    if (status === "loading") return; 
 
     if (!session) {
-      // Not authenticated, redirect to login
       router.push("/login");
       return;
     }
 
-    // If authenticated, fetch orders
     const fetchOrders = async () => {
       try {
         const res = await fetch("/api/orders/user", { cache: "no-store" });
@@ -42,7 +39,6 @@ export default function OrdersPage() {
     fetchOrders();
   }, [session, status, router]);
 
-  // Show loading while checking authentication or fetching data
   if (status === "loading" || loading) {
     return (
       <div className="min-h-[70vh] flex justify-center items-center">
@@ -51,7 +47,6 @@ export default function OrdersPage() {
     );
   }
 
-  // Don't render anything if not authenticated (will redirect)
   if (!session) {
     return null;
   }
@@ -78,7 +73,6 @@ export default function OrdersPage() {
             >
               <div className="card-body">
                 <div className="flex flex-col md:flex-row gap-6">
-                  {/* Preview Image - Low Quality */}
                   <div
                     className="relative rounded-lg overflow-hidden bg-base-200"
                     style={{
@@ -108,7 +102,6 @@ export default function OrdersPage() {
                       )}
                   </div>
 
-                  {/* Order Details */}
                   <div className="flex-grow">
                     <div className="flex justify-between items-start">
                       <div>

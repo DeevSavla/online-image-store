@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast"
 import { ImageKitProvider } from "@imagekit/next"
 
 export default function Providers({children}:{children:React.ReactNode}) {
-    const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_BASE_URL || process.env.NEXT_PUBLIC_URL_ENDPOINT || "";
+    const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_BASE_URL!
     return (
         <SessionProvider refetchInterval={5*60}>
             <ImageKitProvider urlEndpoint={urlEndpoint}>
