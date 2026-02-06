@@ -15,7 +15,7 @@ export default function ImageGallery({ products }: ImageGalleryProps) {
 
       {list.length === 0 && (
         <div className="col-span-full text-center py-12">
-          <p className="text-neutral-400">No products found</p>
+          <p className="text-[#6B7280]">No products found</p>
         </div>
       )}
     </div>

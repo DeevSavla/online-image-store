@@ -113,13 +113,13 @@ export default function ProductPage() {
   if (loading)
     return (
       <div className="min-h-[70vh] flex justify-center items-center">
-        <Loader2 className="w-12 h-12 animate-spin text-white" />
+        <Loader2 className="w-12 h-12 animate-spin text-[#2563EB]" />
       </div>
     );
 
   if (error || !product)
     return (
-      <div className="max-w-md mx-auto my-8 rounded-md border border-red-500/40 bg-red-500/10 px-4 py-3 text-red-300 flex items-center gap-3">
+      <div className="max-w-md mx-auto my-8 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-red-800 flex items-center gap-3">
         <AlertCircle className="w-6 h-6" />
         <span>{error || "Product not found"}</span>
       </div>
@@ -130,7 +130,7 @@ export default function ProductPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-4">
           <div
-            className="relative rounded-lg overflow-hidden"
+            className="relative rounded-lg overflow-hidden border border-[#E5E7EB] bg-[#F5F7FA]"
           >
             <Image
               src={product.imageUrl}
@@ -151,7 +151,7 @@ export default function ProductPage() {
           </div>
 
           {selectedVariant && (
-            <div className="text-sm text-center text-neutral-400">
+            <div className="text-sm text-center text-[#6B7280]">
               Preview: {IMAGE_VARIANTS[selectedVariant.type].dimensions.width} x{" "}
               {IMAGE_VARIANTS[selectedVariant.type].dimensions.height}px
             </div>
@@ -160,8 +160,10 @@ export default function ProductPage() {
 
         <div className="space-y-6">
           <div>
-            <h1 className="text-4xl font-bold mb-2">{product.name}</h1>
-            <p className="text-base-content/80 text-lg">
+            <h1 className="text-4xl font-bold mb-2 text-[#111827]">
+              {product.name}
+            </h1>
+            <p className="text-lg text-[#6B7280]">
               {product.description}
             </p>
           </div>
@@ -171,9 +173,9 @@ export default function ProductPage() {
             {product.variants.map((variant, index) => (
               <div
                 key={`${variant.type}-${index}`}
-                className={`rounded-lg border cursor-pointer transition-colors bg-neutral-900 border-white/10 hover:bg-neutral-800 ${
+                className={`rounded-lg border cursor-pointer transition-colors bg-[#F5F7FA] border-[#E5E7EB] hover:bg-white ${
                   selectedVariant?.type === variant.type
-                    ? "ring-2 ring-white/30"
+                    ? "ring-2 ring-[#2563EB]/40"
                     : ""
                 }`}
                 onClick={() => setSelectedVariant(variant)}
@@ -183,14 +185,14 @@ export default function ProductPage() {
                     <div className="flex items-center gap-3">
                       <ImageIcon className="w-5 h-5" />
                       <div>
-                        <h3 className="font-semibold">
+                        <h3 className="font-semibold text-[#111827]">
                           {
                             IMAGE_VARIANTS[
                               variant.type.toUpperCase() as keyof typeof IMAGE_VARIANTS
                             ].label
                           }
                         </h3>
-                        <p className="text-sm text-base-content/70">
+                        <p className="text-sm text-[#6B7280]">
                           {
                             IMAGE_VARIANTS[
                               variant.type.toUpperCase() as keyof typeof IMAGE_VARIANTS
@@ -207,11 +209,11 @@ export default function ProductPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="text-xl font-bold">
+                      <span className="text-xl font-bold text-[#111827]">
                         ${variant.price.toFixed(2)}
                       </span>
                       <button
-                        className="inline-flex items-center rounded-md bg-white text-black px-3 py-1.5 text-sm font-medium hover:bg-neutral-200 transition"
+                        className="inline-flex items-center rounded-md bg-[#2563EB] text-white px-3 py-1.5 text-sm font-medium hover:bg-[#1D4ED8] transition"
                         onClick={(e) => {
                           e.stopPropagation();
                           handlePurchase(variant);
@@ -226,16 +228,16 @@ export default function ProductPage() {
             ))}
           </div>
 
-          <div className="rounded-lg border border-white/10 bg-neutral-900">
+          <div className="rounded-lg border border-[#E5E7EB] bg-[#F5F7FA]">
             <div className="p-4">
               <h3 className="font-semibold mb-2">License Information</h3>
               <ul className="space-y-2">
                 <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-400" />
+                  <Check className="w-4 h-4 text-green-600" />
                   <span>Personal: Use in personal projects</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-400" />
+                  <Check className="w-4 h-4 text-green-600" />
                   <span>Commercial: Use in commercial projects</span>
                 </li>
               </ul>

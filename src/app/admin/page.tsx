@@ -27,7 +27,7 @@ export default function AdminPage() {
   if (status === "loading") {
     return (
       <div className="min-h-[70vh] flex justify-center items-center">
-        <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
+        <Loader2 className="w-12 h-12 animate-spin text-[#2563EB]" />
       </div>
     );
   }
@@ -39,7 +39,12 @@ export default function AdminPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Add New Product</h1>
+        <h1 className="text-3xl font-bold mb-2 text-[#111827]">
+          Add new product
+        </h1>
+        <p className="mb-8 text-sm text-[#6B7280]">
+          Upload an image, define variants, and set pricing for your store.
+        </p>
         <AdminProductForm />
       </div>
     </div>

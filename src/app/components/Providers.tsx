@@ -14,20 +14,20 @@ export default function Providers({children}:{children:React.ReactNode}) {
                     toastOptions={{
                         duration: 3000,
                         style: {
-                            background: '#1f2937',
-                            color: '#fff',
-                            border: '1px solid #374151',
+                            background: '#FFFFFF',
+                            color: '#111827',
+                            border: '1px solid #E5E7EB',
                         },
                         success: {
                             iconTheme: {
-                                primary: '#10b981',
-                                secondary: '#fff',
+                                primary: '#16A34A',
+                                secondary: '#FFFFFF',
                             },
                         },
                         error: {
                             iconTheme: {
-                                primary: '#ef4444',
-                                secondary: '#fff',
+                                primary: '#DC2626',
+                                secondary: '#FFFFFF',
                             },
                         },
                     }}

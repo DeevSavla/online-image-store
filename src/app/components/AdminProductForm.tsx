@@ -5,7 +5,11 @@ import { useForm, useFieldArray } from "react-hook-form";
 import FileUpload from "./FileUpload";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
-import { IMAGE_VARIANTS, ImageVariantType, IProduct } from "../../../models/product.model";
+import {
+  IMAGE_VARIANTS,
+  ImageVariantType,
+  IProduct,
+} from "../../../models/product.model";
 
 type ProductFormData = Omit<IProduct, "_id">;
 
@@ -66,7 +70,7 @@ export default function AdminProductForm() {
       ]);
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to create product"
+        error instanceof Error ? error.message : "Failed to create product",
       );
     } finally {
       setLoading(false);
@@ -74,53 +78,68 @@ export default function AdminProductForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-4xl mx-auto">
-
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6 max-w-4xl mx-auto"
+    >
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-300">Product Name</label>
+        <label className="block text-sm font-medium text-[#111827]">
+          Product Name
+        </label>
         <input
           type="text"
-          className={`w-full px-3 py-2 bg-gray-800 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            errors.name ? "border-red-500" : "border-gray-600"
+          className={`w-full px-3 py-2 bg-white border rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent ${
+            errors.name ? "border-red-500" : "border-[#E5E7EB]"
           }`}
           {...register("name", { required: "Name is required" })}
         />
         {errors.name && (
-          <span className="text-red-400 text-sm">{errors.name.message}</span>
+          <span className="text-red-600 text-sm">{errors.name.message}</span>
         )}
       </div>
 
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-300">Description</label>
+        <label className="block text-sm font-medium text-[#111827]">
+          Description
+        </label>
         <textarea
-          className={`w-full px-3 py-2 bg-gray-800 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-24 resize-none ${
-            errors.description ? "border-red-500" : "border-gray-600"
+          className={`w-full px-3 py-2 bg-white border rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent h-24 resize-none ${
+            errors.description ? "border-red-500" : "border-[#E5E7EB]"
           }`}
           {...register("description", { required: "Description is required" })}
         />
         {errors.description && (
-          <span className="text-red-400 text-sm">
+          <span className="text-red-600 text-sm">
             {errors.description.message}
           </span>
         )}
       </div>
 
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-300">Product Image</label>
+        <label className="block text-sm font-medium text-[#111827]">
+          Product Image
+        </label>
         <FileUpload onSuccess={handleUploadSuccess} />
       </div>
 
-      <div className="border-t border-gray-700 pt-6">
-        <h3 className="text-lg font-semibold text-gray-200 mb-4">Image Variants</h3>
+      <div className="border-t border-[#E5E7EB] pt-6">
+        <h3 className="text-lg font-semibold text-[#111827] mb-4">
+          Image Variants
+        </h3>
       </div>
 
       {fields.map((field, index) => (
-        <div key={field.id} className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+        <div
+          key={field.id}
+          className="bg-[#F5F7FA] border border-[#E5E7EB] rounded-lg p-6"
+        >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-300">Size & Aspect Ratio</label>
+              <label className="block text-sm font-medium text-[#111827]">
+                Size & Aspect Ratio
+              </label>
               <select
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-white border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent"
                 {...register(`variants.${index}.type`)}
               >
                 {Object.entries(IMAGE_VARIANTS).map(([key, value]) => (
@@ -133,9 +152,11 @@ export default function AdminProductForm() {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-300">License</label>
+              <label className="block text-sm font-medium text-[#111827]">
+                License
+              </label>
               <select
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-white border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent"
                 {...register(`variants.${index}.license`)}
               >
                 <option value="personal">Personal Use</option>
@@ -144,12 +165,14 @@ export default function AdminProductForm() {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-300">Price ($)</label>
+              <label className="block text-sm font-medium text-[#111827]">
+                Price ($)
+              </label>
               <input
                 type="number"
                 step="0.01"
                 min="0.01"
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-white border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-transparent"
                 {...register(`variants.${index}.price`, {
                   valueAsNumber: true,
                   required: "Price is required",
@@ -157,7 +180,7 @@ export default function AdminProductForm() {
                 })}
               />
               {errors.variants?.[index]?.price && (
-                <span className="text-red-400 text-sm">
+                <span className="text-red-600 text-sm">
                   {errors.variants[index]?.price?.message}
                 </span>
               )}
@@ -179,7 +202,7 @@ export default function AdminProductForm() {
 
       <button
         type="button"
-        className="w-full px-4 py-2 border border-gray-600 text-gray-300 rounded-md hover:bg-gray-700 hover:border-gray-500 transition-colors flex items-center justify-center"
+        className="w-full px-4 py-2 border border-[#E5E7EB] text-[#111827] rounded-md hover:bg-[#F5F7FA] hover:border-[#2563EB] transition-colors flex items-center justify-center"
         onClick={() =>
           append({
             type: "SQUARE" as ImageVariantType,
@@ -194,7 +217,7 @@ export default function AdminProductForm() {
 
       <button
         type="submit"
-        className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+        className="w-full px-4 py-3 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
         disabled={loading}
       >
         {loading ? (
