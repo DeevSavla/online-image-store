@@ -2,6 +2,8 @@
 
 An online image marketplace built with Next.js App Router. Includes authentication, role-based authorization, product management, orders, ImageKit uploads, and Razorpay payment/webhook handling.
 
+Live Demo - https://online-image-store.vercel.app
+
 ### Tech Stack
 - Next.js 15 (App Router) + React 19
 - NextAuth (Credentials) with JWT sessions
