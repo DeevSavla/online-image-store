@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Home, User, ShoppingBag } from "lucide-react";
+import { Home, User, ShoppingBag,Search } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function Header() {
@@ -46,19 +46,23 @@ export default function Header() {
               href="/"
               className="hidden sm:inline-flex text-sm font-medium text-[#6B7280] hover:text-[#111827] transition-colors"
             >
-              Browse
+              <Search />
             </Link>
-            <Link
-              href="/orders"
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[#E5E7EB] bg-[#F5F7FA] px-3 py-1.5 text-xs font-medium text-[#111827] hover:bg-white transition-colors"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              My Orders
-            </Link>
+            {
+              session?.user && (
+                <Link
+                  href="/orders"
+                  className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[#E5E7EB] bg-[#F5F7FA] px-3 py-1.5 text-xs font-medium text-[#111827] hover:bg-white transition-colors"
+                >
+                  <ShoppingBag className="w-4 h-4" />
+                  My Orders
+                </Link>
+              )
+            }
 
             <div className="relative">
               <details className="group">
-                <summary className="list-none cursor-pointer inline-flex items-center justify-center w-9 h-9 rounded-full border border-slate-700/80 bg-slate-900/80 hover:border-sky-500/60 hover:bg-slate-900 transition">
+                <summary className="list-none cursor-pointer bg-white inline-flex items-center justify-center w-9 h-9 rounded-full border border-slate-700/80">
                   <User className="w-5 h-5 text-[#111827]" />
                 </summary>
                 <div className="absolute right-0 mt-2 w-64 rounded-xl bg-[#FFFFFF] border border-[#E5E7EB] shadow-2xl p-2">

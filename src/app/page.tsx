@@ -44,7 +44,7 @@ export default function Home() {
       <section className="rounded-3xl border border-[#E5E7EB] bg-[#FFFFFF] px-4 py-6 sm:px-6 sm:py-8">
         <div className="mb-4 flex items-center justify-between gap-4">
           <h2 className="text-lg sm:text-xl font-semibold text-[#111827]">
-            All images
+            Products
           </h2>
           <p className="text-xs sm:text-sm text-[#6B7280]">
             {products.length > 0
