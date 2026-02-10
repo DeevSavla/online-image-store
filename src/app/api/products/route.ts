@@ -1,13 +1,19 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectToDB } from "../../../../lib/db";
 import Product, { IProduct } from "../../../../models/product.model";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await connectToDB();
-    const products = await Product.find({}).lean();
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get("search")?.trim();
+
+    const filter = search
+      ? { name: { $regex: `^${escapeRegex(search)}`, $options: "i" } }
+      : {};
+    const products = await Product.find(filter).lean();
     return NextResponse.json({ products: products ?? [] }, { status: 200 });
   } catch (error) {
     console.log(error);
@@ -16,6 +22,10 @@ export async function GET() {
       { status: 500 }
     );
   }
+}
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 export async function POST(request: Request) {

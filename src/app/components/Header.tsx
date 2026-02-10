@@ -46,7 +46,15 @@ export default function Header() {
               href="/"
               className="hidden sm:inline-flex text-sm font-medium text-[#6B7280] hover:text-[#111827] transition-colors"
             >
-              <Search />
+              Browse
+            </Link>
+            <Link
+              href="/search"
+              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-[#6B7280] hover:text-[#111827] transition-colors"
+              aria-label="Search products"
+            >
+              <Search className="w-4 h-4" />
+              Search
             </Link>
             {
               session?.user && (
